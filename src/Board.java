@@ -19,6 +19,8 @@ public class Board extends JPanel implements ActionListener {
 	//Creates a timer and a screen refresh delay variable.
 	private Timer timer;
 	private final int DELAY = 10;
+	int h = mainUI.screenHeight;
+	int w = mainUI.screenWidth;
 
 	protected static Font score = new Font("Monospaced", Font.BOLD, (int)(0.3*mainUI.screenHeight));
 	
@@ -46,46 +48,51 @@ public class Board extends JPanel implements ActionListener {
 	//Updates all of the graphics
 	private void doDrawing(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
-		int h = mainUI.screenHeight;
-		int w = mainUI.screenWidth;
+
+		Color red = Color.RED;
+		Color yellow = Color.YELLOW;
+		Color green = Color.GREEN;
+		
 		g2d.setFont(score);
 		
-		//Draws Red Box
-		g2d.setColor(Color.RED);
+		drawRect(02, 02, 30, 30, g2d, red); 	//Fencer Red "Touch"
+		drawRect(10, 45, 05, 05, g2d, red); 	//Fencer Red "Red Card"
+		drawRect(19, 45, 05, 05, g2d, yellow);	//Fencer Red "Yellow Card"
+		drawRect(02, 33, 30, 10, g2d, yellow);	//Fencer Red "Off Target"
 		
-		g2d.fillRect((int)(0.02*w),(int)(0.02*h),(int)(0.3*w),(int)(0.3*h));
-		g2d.fillRect((int)(0.10*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h));
-		g2d.fillRect((int)(0.85*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h));
+		drawRect(68, 02, 30, 30, g2d, green);	//Fencer Green "Touch"
+		drawRect(85, 45, 05, 05, g2d, red); 	//Fencer Green "Red Card"
+		drawRect(76, 45, 05, 05, g2d, yellow);	//Fencer Green "Yellow Card"
+		drawRect(68, 33, 30, 10, g2d, yellow);	//Fencer Green Off Target
 		
-		//Draws Green Box
-		g2d.setColor(Color.GREEN);
-		g2d.fillRect((int)(0.68*w),(int)(0.02*h),(int)(0.3*w),(int)(0.3*h));
-		
-		// Draws Yellow Boxes
-		g2d.setColor(Color.YELLOW);
-		g2d.fillRect((int)(0.02*w),(int)(0.33*h),(int)(0.3*w), (int)(0.1*h));
-		g2d.fillRect((int)(0.68*w),(int)(0.33*h),(int)(0.3*w), (int)(0.1*h));
-		g2d.fillRect((int)(0.19*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h));
-		g2d.fillRect((int)(0.76*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h));
+		drawCircle(40, 24, 02, 02, g2d, red);	//Epee Light Indicator
+		drawCircle(49, 24, 02, 02, g2d, red);	//Foil Light Indicator
+		drawCircle(58, 24, 02, 02, g2d, red);	//Saber Light Indicator
+		drawCircle(49, 10, 02, 02, g2d, red);	//Sound Indicator
 
-	
 		//Text
 		g2d.setColor(Color.WHITE);
 		int a = g2d.getFontMetrics().stringWidth("00");
-	
 		g2d.drawString("00", (int)(0.17*w-a/2), (int)(0.8*h));
 		g2d.drawString("99", (int)(0.83*w-a/2), (int)(0.8*h));
 		
-		g2d.draw3DRect((int)(0.02*w),(int)(0.02*h),(int)(0.3*w),(int)(0.3*h),true);
-		g2d.draw3DRect((int)(0.10*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h),true);
-		g2d.draw3DRect((int)(0.85*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h),true);
-		g2d.draw3DRect((int)(0.68*w),(int)(0.02*h),(int)(0.3*w),(int)(0.3*h),true);
-		g2d.draw3DRect((int)(0.02*w),(int)(0.33*h),(int)(0.3*w), (int)(0.1*h),true);
-		g2d.draw3DRect((int)(0.68*w),(int)(0.33*h),(int)(0.3*w), (int)(0.1*h),true);
-		g2d.draw3DRect((int)(0.19*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h),true);
-		g2d.draw3DRect((int)(0.76*w),(int)(0.45*h),(int)(0.05*w),(int)(0.05*h),true);
-		
 		repaint();
+	}
+	
+	public void drawRect(double x, double y, double width, double height, Graphics2D g2d, Color color) {
+		g2d.setColor(color);
+		g2d.fillRect((int)(x*w*0.01),(int)(y*h*0.01),(int)(width*w*0.01),(int)(height*h*0.01));
+		g2d.setColor(Color.WHITE);
+		g2d.draw3DRect((int)(x*w*0.01),(int)(y*h*0.01),(int)(width*w*0.01),(int)(height*h*0.01), true);
+		g2d.setColor(color);
+	}
+	
+	public void drawCircle(double x, double y, double width, double height, Graphics2D g2d, Color color) {
+		g2d.setColor(color);
+		g2d.fillOval((int)(x*w*0.01),(int)(y*h*0.01),(int)(width*w*0.01),(int)(height*w*0.01));
+		g2d.setColor(Color.WHITE);
+		g2d.drawOval((int)(x*w*0.01),(int)(y*h*0.01),(int)(width*w*0.01),(int)(height*w*0.01));
+		g2d.setColor(color);
 	}
 	
 	// Action event listener, not sure if it still serves practical purpose but still gonna leave it
